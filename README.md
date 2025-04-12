@@ -4,7 +4,7 @@
 
 ---
 
-## 📌 Abstract
+## 📌 Problem Statement
 
 The rise of social media has introduced challenges in ensuring safe and authentic online interactions. A critical issue is the spread of harmful content and unauthorized access to accounts. This project investigates the integration of **multimodal AI techniques** and **context-based authentication** to address these concerns. 
 
