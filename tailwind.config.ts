@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +18,9 @@ export default {
 			}
 		},
 		extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -26,32 +28,32 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: 'hsl(var(--primary))', // Navy Blue
+					foreground: 'hsl(var(--primary-foreground))' // Soft White
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: 'hsl(var(--secondary))', // Light Gray
+					foreground: 'hsl(var(--secondary-foreground))' // Darker Navy/Gray
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: 'hsl(var(--muted))', // Slightly darker Light Gray
+					foreground: 'hsl(var(--muted-foreground))' // Medium Navy/Gray
 				},
 				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					DEFAULT: 'hsl(var(--accent))', // Maroon
+					foreground: 'hsl(var(--accent-foreground))' // Soft White
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
 				},
 				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					DEFAULT: 'hsl(var(--card))', // Soft White (or very light gray for depth)
+					foreground: 'hsl(var(--card-foreground))' // Dark Navy/Gray
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -63,7 +65,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors for our app
+				// Custom colors (keeping purple for now, can be removed if not used by Chatify)
 				purple: {
 					light: '#D6BCFA',
 					DEFAULT: '#9b87f5',
@@ -76,12 +78,19 @@ export default {
 					orange: '#FEC6A1',
 					purple: '#E5DEFF',
 					pink: '#FFDEE2',
-				}
+				},
+        // DSU Specific
+        dsu: {
+          navy: 'hsl(var(--primary))', // From existing primary
+          maroon: 'hsl(var(--accent))', // From existing accent
+          'soft-white': 'hsl(var(--background))', // Or a slightly off-white like 0 0% 98%
+          'light-gray': 'hsl(var(--secondary))', // From existing secondary
+        }
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: 'var(--radius)', // e.g., 0.75rem
+				md: 'calc(var(--radius) - 2px)', // e.g., 0.5rem
+				sm: 'calc(var(--radius) - 4px)' // e.g., 0.375rem
 			},
 			keyframes: {
 				'accordion-down': {

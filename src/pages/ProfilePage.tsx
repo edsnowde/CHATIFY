@@ -1,10 +1,11 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { User, Post as PostType } from "@/utils/types";
 import Navbar from "@/components/Navbar";
 import Profile from "@/components/Profile";
 import { useToast } from "@/hooks/use-toast";
+import { Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ProfilePageProps {
   toggleDarkMode: () => void;
@@ -26,9 +27,28 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
       const storedPosts = localStorage.getItem("posts");
       if (storedPosts) {
         const parsedPosts = JSON.parse(storedPosts, (key, value) => {
-          // Convert string dates back to Date objects
           if (key === 'createdAt' || key === 'updatedAt') {
             return new Date(value);
+          }
+          // Role migration for authors within posts
+          if (key === 'author' && value && typeof value === 'object' && value !== null) {
+            const authorObj = value as any;
+            if (authorObj.createdAt && typeof authorObj.createdAt === 'string') authorObj.createdAt = new Date(authorObj.createdAt);
+            if (authorObj.role === 'senior') authorObj.role = 'faculty';
+            else if (authorObj.role === 'junior') authorObj.role = 'student';
+          }
+          // Role migration for authors within comments
+          if (key === 'comments' && Array.isArray(value)) {
+            value.forEach(comment => {
+              const commentObj = comment as any;
+              if (commentObj.createdAt && typeof commentObj.createdAt === 'string') commentObj.createdAt = new Date(commentObj.createdAt);
+              if (commentObj.author && typeof commentObj.author === 'object' && commentObj.author !== null) {
+                const commentAuthorObj = commentObj.author as any;
+                if (commentAuthorObj.createdAt && typeof commentAuthorObj.createdAt === 'string') commentAuthorObj.createdAt = new Date(commentAuthorObj.createdAt);
+                if (commentAuthorObj.role === 'senior') commentAuthorObj.role = 'faculty';
+                else if (commentAuthorObj.role === 'junior') commentAuthorObj.role = 'student';
+              }
+            });
           }
           return value;
         });
@@ -47,14 +67,16 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
   };
 
   // Fetch all users from localStorage
-  const fetchUsers = () => {
+  const fetchUsers = (): User[] => {
     try {
       const storedUsers = localStorage.getItem("users");
       if (storedUsers) {
         const parsedUsers = JSON.parse(storedUsers, (key, value) => {
-          // Convert string dates back to Date objects
           if (key === 'createdAt') {
             return new Date(value);
+          }
+          if (key === 'role' && (value === 'senior' || value === 'junior')) {
+            return value === 'senior' ? 'faculty' : 'student';
           }
           return value;
         });
@@ -72,35 +94,54 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 300));
         
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser, (key, value) => {
-            // Convert string dates back to Date objects
+        const storedUserString = localStorage.getItem("user");
+        if (storedUserString) {
+          let parsedUser = JSON.parse(storedUserString, (key, value) => {
             if (key === 'createdAt') {
               return new Date(value);
             }
+            // Migration for old roles if present in "user" item
+            if (key === 'role' && (value === 'senior' || value === 'junior')) {
+                return value === 'senior' ? 'faculty' : 'student';
+            }
             return value;
-          });
+          }) as User;
+
+          // If role migration happened for the current user, update the "user" item in localStorage
+          // This check ensures that if the original stored role was old, it gets updated
+          const originalUserForRoleCheck = JSON.parse(storedUserString) as any;
+          if (originalUserForRoleCheck.role === 'senior' || originalUserForRoleCheck.role === 'junior') {
+             // Re-save the parsedUser (which now has correct student/faculty role) to localStorage
+             localStorage.setItem("user", JSON.stringify(parsedUser));
+          }
+
           setCurrentUser(parsedUser);
           
-          // If no ID provided, show current user's profile
           if (!id) {
             setProfileUser(parsedUser);
-            const allPosts = fetchPosts();
-            setUserPosts(allPosts.filter(post => post.authorId === parsedUser.id));
+            const allPostsData = fetchPosts(); // fetchPosts now has refined migration
+            setUserPosts(allPostsData.filter(post => post.authorId === parsedUser.id).map(post => {
+                // Ensure author within these posts also has correctly typed role and dates
+                let authorForPost = post.author;
+                if(authorForPost){
+                    if(typeof authorForPost.createdAt === 'string') authorForPost.createdAt = new Date(authorForPost.createdAt);
+                    const authorRoleAny = authorForPost.role as any;
+                    if(authorRoleAny === 'senior') authorForPost.role = 'faculty';
+                    else if(authorRoleAny === 'junior') authorForPost.role = 'student';
+                }
+                return {...post, author: authorForPost};
+            }));
           }
         } else if (!id) {
-          // Not logged in and no ID provided, redirect to login
           navigate("/auth?mode=login");
         }
       } catch (error) {
         console.error('Error checking authentication:', error);
         toast({
-          title: "Error loading profile",
-          description: "There was a problem loading this profile.",
+          title: "Error loading profile data",
+          description: "There was a problem initializing profile information.",
           variant: "destructive"
         });
       } finally {
@@ -117,36 +158,47 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
       const loadUserData = async () => {
         setIsLoading(true);
         try {
-          // Simulate API delay
           await new Promise(resolve => setTimeout(resolve, 300));
           
-          // Fetch users from localStorage
-          const users = fetchUsers();
-          const user = users.find(user => user.id === id);
+          const users = fetchUsers(); // fetchUsers handles its own role migration
+          const user = users.find(u => u.id === id);
           
           if (user) {
+            // Ensure the specific profile user's role is correct if somehow missed (should be redundant)
+            const userRoleAny = user.role as any;
+            if (userRoleAny === 'senior') user.role = 'faculty';
+            else if (userRoleAny === 'junior') user.role = 'student';
+
             setProfileUser(user);
             
-            // Fetch all posts and filter for this user
-            const allPosts = fetchPosts();
-            const filteredPosts = allPosts.filter(post => post.authorId === id);
+            const allPostsData = fetchPosts(); // fetchPosts now has refined migration
+            const filteredPosts = allPostsData.filter(post => post.authorId === id);
             
-            // Attach author information to each post
             const postsWithAuthors = filteredPosts.map(post => {
-              // Find author for this post
-              const author = users.find(u => u.id === post.authorId);
+              // Find author from the already migrated 'users' list
+              const author = users.find(u => u.id === post.authorId); 
+              // The author object from `users` should already have the correct role.
+              // The check below is a safeguard but ideally not needed if fetchUsers and fetchPosts are robust.
+              if (author) {
+                  const authorRoleAny = author.role as any;
+                  if (authorRoleAny === 'senior' || authorRoleAny === 'junior') {
+                      author.role = authorRoleAny === 'senior' ? 'faculty' : 'student';
+                  }
+                  if (typeof author.createdAt === 'string') { // Ensure date type
+                      author.createdAt = new Date(author.createdAt);
+                  }
+              }
               return {
                 ...post,
-                author: author
+                author: author // This author comes from `users` which should be correctly typed by fetchUsers
               };
             });
             
             setUserPosts(postsWithAuthors);
           } else {
-            // User not found
             toast({
               title: "User not found",
-              description: "The requested profile could not be found.",
+              description: "The requested Chatify profile could not be found.",
               variant: "destructive"
             });
             navigate("/not-found");
@@ -170,18 +222,16 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
   // Function to handle post updates
   const handlePostUpdate = (updatedPost: PostType) => {
     try {
-      // Update posts in state
-      const updatedPosts = userPosts.map(post => 
+      const updatedUserPosts = userPosts.map(post => 
         post.id === updatedPost.id ? updatedPost : post
       );
-      setUserPosts(updatedPosts);
+      setUserPosts(updatedUserPosts);
       
-      // Update posts in localStorage
-      const allPosts = fetchPosts();
-      const updatedAllPosts = allPosts.map(post => 
+      const allPosts = fetchPosts(); // Refetch to ensure we're working with the latest full list
+      const updatedAllPostsStorage = allPosts.map(post => 
         post.id === updatedPost.id ? updatedPost : post
       );
-      localStorage.setItem("posts", JSON.stringify(updatedAllPosts));
+      localStorage.setItem("posts", JSON.stringify(updatedAllPostsStorage));
       
       toast({
         title: "Post updated",
@@ -200,14 +250,12 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
   // Function to handle post deletion
   const handlePostDelete = (postId: string) => {
     try {
-      // Remove post from state
-      const remainingPosts = userPosts.filter(post => post.id !== postId);
-      setUserPosts(remainingPosts);
+      const remainingUserPosts = userPosts.filter(post => post.id !== postId);
+      setUserPosts(remainingUserPosts);
       
-      // Remove post from localStorage
-      const allPosts = fetchPosts();
-      const updatedAllPosts = allPosts.filter(post => post.id !== postId);
-      localStorage.setItem("posts", JSON.stringify(updatedAllPosts));
+      const allPosts = fetchPosts(); // Refetch
+      const updatedAllPostsStorage = allPosts.filter(post => post.id !== postId);
+      localStorage.setItem("posts", JSON.stringify(updatedAllPostsStorage));
       
       toast({
         title: "Post deleted",
@@ -224,18 +272,31 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
       
-      <main className="flex-1 p-4">
-        <div className="max-w-6xl mx-auto">
+      <main className="flex-1 p-4 md:p-6 lg:p-8">
+        <div className="max-w-5xl mx-auto">
           {isLoading ? (
-            <div className="animate-pulse space-y-8">
-              <div className="h-48 bg-muted rounded-lg w-full"></div>
-              <div className="h-24 -mt-12 ml-6 rounded-full w-24 bg-muted"></div>
-              <div className="h-8 bg-muted rounded w-1/3"></div>
-              <div className="h-4 bg-muted rounded w-1/4"></div>
-              <div className="h-64 bg-muted rounded-lg w-full"></div>
+            <div className="animate-pulse space-y-8 mt-8">
+              <div className="h-48 sm:h-64 bg-muted rounded-xl w-full"></div>
+              <div className="flex items-end gap-4 -mt-16 sm:-mt-20 px-4 sm:px-6">
+                <div className="h-32 w-32 sm:h-40 sm:w-40 rounded-full bg-muted border-4 border-background"></div>
+                <div className="flex-1 space-y-3 pb-4">
+                  <div className="h-7 bg-muted rounded w-1/2"></div>
+                  <div className="h-4 bg-muted rounded w-1/3"></div>
+                </div>
+              </div>
+              <div className="px-4 sm:px-6 space-y-4 mt-4">
+                <div className="h-16 bg-muted rounded-lg w-full"></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="h-12 bg-muted rounded-md"></div>
+                  <div className="h-12 bg-muted rounded-md"></div>
+                  <div className="h-12 bg-muted rounded-md"></div>
+                </div>
+              </div>
+              <div className="h-10 bg-muted rounded-lg w-1/3 mt-6 mx-4 sm:mx-6"></div>
+              <div className="h-64 bg-muted rounded-lg w-full mt-2 mx-4 sm:mx-6"></div>
             </div>
           ) : profileUser ? (
             <Profile 
@@ -246,8 +307,11 @@ const ProfilePage = ({ toggleDarkMode, isDarkMode }: ProfilePageProps) => {
               onPostDelete={handlePostDelete}
             />
           ) : (
-            <div className="text-center py-12">
-              <p>Profile not found</p>
+            <div className="text-center py-20">
+              <Users className="h-20 w-20 text-muted-foreground mx-auto mb-6 opacity-50" />
+              <h2 className="text-2xl font-semibold text-foreground mb-2">Profile Not Found</h2>
+              <p className="text-muted-foreground">The Chatify profile you're looking for doesn't exist or could not be loaded.</p>
+              <Button onClick={() => navigate('/')} className="mt-6">Go to Home</Button>
             </div>
           )}
         </div>

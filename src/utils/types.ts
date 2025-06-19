@@ -1,7 +1,4 @@
-
-// Type definitions for our application
-
-export type UserRole = "senior" | "junior";
+export type UserRole = "student" | "faculty";
 
 export interface User {
   id: string;
@@ -22,21 +19,26 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date;
   authorId: string;
-  author?: User;
-  likes: string[]; // Array of user IDs
-  comments: Comment[];
-  tags: string[]; // Array of hashtags
+  author: User;
+  likes: string[];
+  comments: string[];
+  tags: string[];
+  isFlagged: boolean | null;
+  moderationScore: number | null;
+  moderationDetails: any;
+  moderationCheckedAt: Date | null;
+  moderationError?: boolean;
 }
 
-export interface Comment {
+export interface CommentType {
   id: string;
   content: string;
   createdAt: Date;
   authorId: string;
   author?: User;
   postId: string;
-  parentId?: string; // For replies to comments
-  likes: string[]; // Array of user IDs
+  parentId?: string;
+  likes: string[];
 }
 
 export interface Notification {
@@ -46,12 +48,12 @@ export interface Notification {
   message: string;
   seen: boolean;
   createdAt: Date;
-  actorId: string; // User who triggered the notification
+  actorId: string;
   actor?: User;
-  recipientId: string; // User receiving the notification
+  recipientId: string;
   postId?: string;
   commentId?: string;
-  link?: string; // Navigation link when clicked
+  link?: string;
 }
 
 export interface AppState {
@@ -59,3 +61,10 @@ export interface AppState {
   notifications: Notification[];
   users: User[];
 }
+
+
+
+
+
+
+

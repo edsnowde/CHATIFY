@@ -5,83 +5,80 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* DSU-inspired Light Theme for Chatify */
+    --background: 0 0% 98%; /* Soft White (#F9F9F9) - Page background */
+    --foreground: 215 25% 20%; /* Dark Navy/Gray for text (#262F3C) */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%; /* Slightly whiter for cards to stand out on soft white bg */
+    --card-foreground: 215 25% 20%; /* Dark Navy/Gray */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%; 
+    --popover-foreground: 215 25% 20%;
 
-    --primary: 258 78% 75%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 215 100% 19%; /* Navy Blue (#002D62) */
+    --primary-foreground: 0 0% 98%; /* Soft White for text on primary */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 92%; /* Light Gray (#EAEAEA) - for subtle backgrounds, borders */
+    --secondary-foreground: 215 25% 25%; /* Darker Navy/Gray for text on secondary */
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 94%; /* Slightly darker Light Gray (#F0F0F0) - for muted text, dividers */
+    --muted-foreground: 215 15% 45%; /* Medium Navy/Gray for muted text */
 
-    --accent: 258 78% 92%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 345 80% 30%; /* Maroon (#800020 more saturated for web) */
+    --accent-foreground: 0 0% 98%; /* Soft White for text on accent */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%; 
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 258 78% 75%;
+    --border: 0 0% 88%; /* Light Gray for borders (#E0E0E0) */
+    --input: 0 0% 100%; /* White for input backgrounds, with border for definition */
+    --ring: 215 100% 19%; /* Navy Blue for focus rings */
 
-    --radius: 0.75rem;
+    --radius: 0.75rem; /* Rounded corners for cards */
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 258 78% 75%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 258 78% 75%;
+    /* Sidebar Colors - Kept from original, can be themed later if sidebar is added */
+    --sidebar-background: 0 0% 96%; 
+    --sidebar-foreground: 215 25% 20%; 
+    --sidebar-primary: 215 100% 19%; 
+    --sidebar-primary-foreground: 0 0% 98%; 
+    --sidebar-accent: 345 80% 30%; 
+    --sidebar-accent-foreground: 0 0% 98%; 
+    --sidebar-border: 0 0% 88%; 
+    --sidebar-ring: 215 100% 19%; 
   }
 
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    /* DSU-inspired Dark Theme for Chatify */
+    --background: 215 30% 10%; /* Very Dark Blue (#101A2A) - Page background */
+    --foreground: 0 0% 90%; /* Light Gray/Off-White for text (#E5E5E5) */
 
-    --card: 224 71% 4%;
-    --card-foreground: 210 40% 98%;
+    --card: 215 28% 12%; /* Slightly lighter dark blue for cards to stand out */
+    --card-foreground: 0 0% 90%; 
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 215 30% 8%; 
+    --popover-foreground: 0 0% 90%;
 
-    --primary: 258 78% 75%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 215 70% 65%; /* Lighter Navy Blue for dark mode (#6B9DE8) */
+    --primary-foreground: 215 25% 15%; /* Dark Navy Blue for text on primary */
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 215 25% 15%; /* Dark Grayish Blue (#1C2738) */
+    --secondary-foreground: 0 0% 85%; /* Lighter Gray for text on secondary */
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 215 25% 18%; /* Slightly lighter Dark Grayish Blue (#212E40) */
+    --muted-foreground: 0 0% 60%; /* Medium Gray for muted text */
 
-    --accent: 258 78% 40%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 345 70% 55%; /* Lighter Maroon for dark mode (#D75C7A slightly brighter) */
+    --accent-foreground: 0 0% 98%; /* Soft White for text on accent */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%; 
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 258 78% 65%;
-
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 258 78% 75%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 258 78% 40%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 258 78% 65%;
+    --border: 215 20% 25%; /* Darker Grayish Blue for borders (#2D3C53) */
+    --input: 215 25% 15%; /* Dark Grayish Blue for input backgrounds */
+    --ring: 215 70% 65%; /* Lighter Navy Blue for focus rings */
+    
+    /* Sidebar Colors - Dark Theme */
+    /* ... keep existing dark sidebar colors ... */
   }
 }
 
@@ -91,7 +88,9 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -102,5 +101,10 @@
 
   .animate-out {
     animation: fade-out 0.3s ease-out;
+  }
+  
+  /* Subtle gradient for card accents or backgrounds if needed */
+  .card-gradient {
+    @apply bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent;
   }
 }

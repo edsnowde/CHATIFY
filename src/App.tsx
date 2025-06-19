@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +8,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import AskGeminiPage from "./pages/AskGeminiPage";
+import FloatingAskGeminiButton from "./components/ai/FloatingAskGeminiButton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const queryClient = new QueryClient();
 
@@ -45,8 +47,10 @@ const App = () => {
             <Route path="/auth" element={<AuthPage toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />} />
             <Route path="/profile" element={<ProfilePage toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />} />
             <Route path="/profile/:id" element={<ProfilePage toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />} />
+            <Route path="/ask-gemini" element={<AskGeminiPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FloatingAskGeminiButton />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
