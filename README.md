@@ -34,10 +34,15 @@ Chatify combines **VADER for text analysis**, **Sightengine CNNs for image moder
 
 chatify/
 ├── frontend/ # React.js + TypeScript UI components
+
 ├── backend/ # Flask APIs for auth, moderation, storage
+
 ├── ai_models/ # AI integration: VADER & Sightengine
+
 ├── database/ # MongoDB schemas & connection logic
+
 ├── requirements.txt # Backend Python dependencies
+
 └── .gitignore # Ignored files and sensitive configs
 
 ## ⚙️ Installation
@@ -96,10 +101,15 @@ API Testing: Use Postman for endpoint verification.
 
 Feature	Status/Accuracy
 Text Moderation	      ✅ 80% Accuracy – Fast but sarcasm-sensitive
+
 Image Moderation	    ✅ 90% Accuracy – Reliable CNN detection
+
 Authentication	      ✅ 100% Functional with OTP Simulation
+
 Gemini Integration	  ✅ Fast (<3s) and Responsive (Simulated)
+
 Stability	            ✅ 99% Uptime under load (100 concurrent)
+
 
 🔮 Future Enhancements
 
