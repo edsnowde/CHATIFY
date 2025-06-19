@@ -44,90 +44,78 @@ chatify/
 
 ### 1. Clone the Repository
 
-```bash
 git clone https://github.com/edsnowde/CHATIFY.git
 cd chatify
 
 2. Set Environment Variables
+
 Create a .env file with necessary variables (e.g., API keys, MongoDB URI).
 
 3. Install Backend Dependencies
 
 pip install -r requirements.txt
 Includes:
-
 flask, requests, python-dotenv
-
 speechrecognition, pyaudio, pyttsx3 (for planned audio features)
 
 4. Install Frontend Dependencies
-bash
 
 cd frontend
 npm install
-5. Setup MongoDB
-Run MongoDB locally or connect to MongoDB Atlas.
 
+5. Setup MongoDB
+
+Run MongoDB locally or connect to MongoDB Atlas.
 Create database chatify and collections: users, posts, moderation_logs.
 
 6. Run Backend
-bash
 
 python app.py
 Runs at: http://localhost:5000
 
 7. Run Frontend
-bash
 
 cd frontend
 npm run dev
 Runs at: http://localhost:5000
 
 🧪 Usage
+
 Register/Login with role-based access.
-
 Post Content: Submit text/images for real-time AI moderation.
-
 Research Queries: Use Gemini chat simulation for academic tasks.
-
 Moderation Logs: Admins can review flagged content.
 
 ✅ Testing
+
 Frontend Unit Tests: npm run dev
-
 Backend Tests: python app.py
-
 API Testing: Use Postman for endpoint verification.
 
 📈 Result Summary
+
 Feature	Status/Accuracy
-Text Moderation	    ✅ 80% Accuracy – Fast but sarcasm-sensitive
-Image Moderation	✅ 90% Accuracy – Reliable CNN detection
-Authentication	    ✅ 100% Functional with OTP Simulation
-Gemini Integration	✅ Fast (<3s) and Responsive (Simulated)
-Stability	        ✅ 99% Uptime under load (100 concurrent)
+Text Moderation	      ✅ 80% Accuracy – Fast but sarcasm-sensitive
+Image Moderation	    ✅ 90% Accuracy – Reliable CNN detection
+Authentication	      ✅ 100% Functional with OTP Simulation
+Gemini Integration	  ✅ Fast (<3s) and Responsive (Simulated)
+Stability	            ✅ 99% Uptime under load (100 concurrent)
 
 🔮 Future Enhancements
+
 🎙 Audio Moderation: Integrate Whisper ASR.
-
 🎞️ Video Moderation: Analyze frames + audio.
-
 🔒 Adaptive Authentication: One-Class SVM anomaly detection + full OTP.
-
 🧠 Explainable AI: Add SHAP to show why a post was flagged.
-
 🌍 Distributed Systems: Use MongoDB Sharding + Flask microservices for large-scale deployment.
-
 🚀 Deployment Optimization: Docker, Kubernetes, and cloud-ready pipelines.
 
+
 📚 Educational Use Case
+
 Chatify is a practical tool to:
-
 Explore AI-based moderation (text, image, future: audio/video)
-
 Understand secure authentication mechanisms
-
 Analyze scalable data storage with MongoDB
-
 Experiment with explainability, model tuning, and distributed systems
 
