@@ -114,18 +114,29 @@ Stability	            ✅ 99% Uptime under load (100 concurrent)
 🔮 Future Enhancements
 
 🎙 Audio Moderation: Integrate Whisper ASR.
+
 🎞️ Video Moderation: Analyze frames + audio.
+
 🔒 Adaptive Authentication: One-Class SVM anomaly detection + full OTP.
+
 🧠 Explainable AI: Add SHAP to show why a post was flagged.
+
 🌍 Distributed Systems: Use MongoDB Sharding + Flask microservices for large-scale deployment.
+
 🚀 Deployment Optimization: Docker, Kubernetes, and cloud-ready pipelines.
+
 
 
 📚 Educational Use Case
 
 Chatify is a practical tool to:
+
 Explore AI-based moderation (text, image, future: audio/video)
+
 Understand secure authentication mechanisms
+
 Analyze scalable data storage with MongoDB
+
 Experiment with explainability, model tuning, and distributed systems
+
 
